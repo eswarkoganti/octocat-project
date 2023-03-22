@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import '../../scss/NewAssessment.scss';
 import { AssessmentService } from '../../services/AssessmentService';
 
 export const NewAssessment = () => {
@@ -8,7 +9,6 @@ export const NewAssessment = () => {
     catName: ``,
     createdAt: new Date(),
     deletedAt: new Date(),
-    id: 2,
     instrumentType: ``,
     riskLevel: ``,
     score: undefined,
@@ -19,9 +19,7 @@ export const NewAssessment = () => {
 
   // create a form that utilizes the "onSubmit" function to send data to
   // packages/client/src/services/AssessmentService.js and then onto the packages/api/src/routes/assessment express API
-  // const onSubmit = async (data) => {
-  //   await AssessmentService.submit(data);
-  // };
+
   const onSubmit = (data) => {
     const a = data.hissesAtStrangers === null ? 0 : parseInt(data.hissesAtStrangers);
     const b = data.physicalAltercationWithOtherCats === null ? 0 : parseInt(data.physicalAltercationWithOtherCats);
@@ -47,39 +45,45 @@ export const NewAssessment = () => {
   };
 
   return (
-    <div className="newAssessment">
+    <div className="new-assessment">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-1 flex-col justify-evenly">
         <div className="row">
-          <div className="col-md-6">
+          <div className="col">
             <label htmlFor="Cat Name">Cat Name</label>
-            <input
-              {...register(`catName`)}
-              type="text"
-              placeholder="Cat Name"
-            />
+            <div>
+              <input
+                {...register(`catName`)}
+                type="text"
+                placeholder="Cat Name"
+                className="input"
+              />
+            </div>
           </div>
-          <div className="col-md-6">
+          <div className="col">
             <label htmlFor="Cat Date of Birth">Cat Date of Birth</label>
-            <input
-              type="date"
-              placeholder="Cat Date of Birth"
-              {...register(`catDateOfBirth`)}
-            />
+            <div>
+              <input
+                type="date"
+                placeholder="Cat Date of Birth"
+                {...register(`catDateOfBirth`)}
+                className="input"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="row mt-2">
+        <div className="row mt-3">
           <div className="col-md-6">
-            <label htmlFor="Previous contact with the Cat Judicia">Previous contact with the Cat Judicial System</label>
+            <label htmlFor="Previous contact with the Cat">Previous contact with the Cat Judicial System</label>
             <div>
               <input
                 type="radio"
                 value="0"
                 {...register(`previousContactWithTheCatJudicial`)}
               />
-              <label htmlFor="No">No</label>
+              <label htmlFor="No" className="radio-label">No</label>
             </div>
             <div>
               <input
@@ -87,7 +91,7 @@ export const NewAssessment = () => {
                 value="1"
                 {...register(`previousContactWithTheCatJudicial`)}
               />
-              <label htmlFor="Yes">Yes</label>
+              <label htmlFor="Yes" className="radio-label">Yes</label>
             </div>
           </div>
           {/* -------------------------------- */}
@@ -99,7 +103,7 @@ export const NewAssessment = () => {
                 {...register(`physicalAltercationWithOtherCats`)}
                 value="0"
               />
-              <label htmlFor="0-3altercations">0-3 altercations</label>
+              <label htmlFor="0-3altercations" className="radio-label">0-3 altercations</label>
             </div>
             <div>
               <input
@@ -107,13 +111,13 @@ export const NewAssessment = () => {
                 {...register(`physicalAltercationWithOtherCats`)}
                 value="1"
               />
-              <label htmlFor="3+ altercations">3+ altercations</label>
+              <label htmlFor="3+ altercations" className="radio-label">3+ altercations</label>
             </div>
           </div>
         </div>
 
         {/* -------------------------- */}
-        <div className="row mt-2">
+        <div className="row mt-3">
           <div className="col-md-6">
             <label htmlFor="Physical altercations">Physical altercations with owner (scratching, biting, etc...)</label>
             <div>
@@ -122,7 +126,7 @@ export const NewAssessment = () => {
                 {...register(`physicalAltercationsWithOwner`)}
                 value="1"
               />
-              <label htmlFor="10+ altercations">10+ altercations</label>
+              <label htmlFor="10+ altercations" className="radio-label">10+ altercations</label>
             </div>
             <div>
               <input
@@ -130,19 +134,19 @@ export const NewAssessment = () => {
                 {...register(`physicalAltercationsWithOwner`)}
                 value="0"
               />
-              <label htmlFor="0-10 altercations">0-10 altercations</label>
+              <label htmlFor="0-10 altercations" className="radio-label">0-10 altercations</label>
             </div>
           </div>
           {/* ------------------ */}
-          <div className="col-md-6 flex">
-            <label htmlFor="Plays well with dogs" >Plays well with dogs</label>
+          <div className="col-md-6">
+            <label htmlFor="Plays well with dogs">Plays well with dogs</label>
             <div>
               <input
                 type="radio"
                 value="1"
                 {...register(`playsWellWithDogs`)}
               />
-              <label htmlFor="No">No</label>
+              <label htmlFor="No" className="radio-label">No</label>
             </div>
             <div>
               <input
@@ -150,11 +154,11 @@ export const NewAssessment = () => {
                 value="0"
                 {...register(`playsWellWithDogs`)}
               />
-              <label htmlFor="No">Yes</label>
+              <label htmlFor="Yes" className="radio-label">Yes</label>
             </div>
           </div>
         </div>
-        <div className="mt-2">
+        <div className="mt-3">
           <label htmlFor="Hisses at strangers">Hisses at strangers</label>
           <div>
             <input
@@ -162,7 +166,7 @@ export const NewAssessment = () => {
               value="1"
               {...register(`hissesAtStrangers`)}
             />
-            <label htmlFor="Yes">Yes</label>
+            <label htmlFor="Yes" className="radio-label">Yes</label>
           </div>
           <div>
             <input
@@ -170,14 +174,17 @@ export const NewAssessment = () => {
               value="0"
               {...register(`hissesAtStrangers`)}
             />
-            <label htmlFor="No">No</label>
+            <label htmlFor="No" className="radio-label">No</label>
           </div>
         </div>
-        <button
-          type="submit"
-        >
-          Submit
-        </button>
+        <div className="mt-3">
+          <button
+            type="submit"
+            className="btn btn-primary"
+          >
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );
