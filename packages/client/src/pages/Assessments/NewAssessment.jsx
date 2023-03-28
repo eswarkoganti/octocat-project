@@ -27,7 +27,7 @@ export const NewAssessment = () => {
     const e = data.previousContactWithTheCatJudicial === null ? 0 : parseInt(data.previousContactWithTheCatJudicial);
     const sum = a + b + c + d + e;
     let riskLevel = ``;
-    if (sum <= 2) {
+    if (sum < 2) {
       riskLevel = `low`;
     } else if (sum >= 2 && sum <= 4) {
       riskLevel = `medium`;
