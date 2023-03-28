@@ -19,6 +19,7 @@ export const AssessmentList = () => {
       x.createdAt = moment(x.createdAt).format(`YYYY-MM-DD`);
       x.updatedAt = moment(x.updatedAt).format(`YYYY-MM-DD`);
       x.deletedAt = moment(x.deletedAt).format(`YYYY-MM-DD`);
+      x.catDateOfBirth = moment(x.catDateOfBirth).format(`YYYY-MM-DD`);
     });
     setAssessments(dateFormat);
     setLoading(false);
@@ -31,6 +32,14 @@ export const AssessmentList = () => {
   const columns = useMemo(() => COLUMNS, []);
   const data = assessments;
 
+  const handleDelete = (id) => {
+    const text = `Are you sure you want to delete the assessment?`;
+    if (window.confirm(text) === true) {
+      AssessmentService.deleteAssessment(id);
+      fetchAssessments();
+    }
+  };
+
   const assessmentTable = useTable({
     columns,
     data,
@@ -39,7 +48,7 @@ export const AssessmentList = () => {
   const { getTableBodyProps, getTableProps, headerGroups, prepareRow, rows } = assessmentTable;
 
   return (
-    <div>
+    <>
       {
         loading ?
           <div>Data is loading.....</div> :
@@ -49,6 +58,7 @@ export const AssessmentList = () => {
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) =>
                     <th {...column.getHeaderProps()}>{column.render(`Header`)}</th>)}
+                  <th>Actions</th>
                 </tr>)}
             </thead>
             <tbody {...getTableBodyProps()}>
@@ -57,12 +67,20 @@ export const AssessmentList = () => {
                 return (
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell) => <td {...cell.getCellProps()}>{cell.render(`Cell`)}</td>)}
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(row.values.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ); })}
             </tbody>
           </table>
       }
-    </div>
+    </>
   );
 
 };

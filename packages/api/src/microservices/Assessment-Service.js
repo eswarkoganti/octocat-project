@@ -7,7 +7,6 @@ exports.submit = async (assessment) => {
     catDateOfBirth: assessment.catDateOfBirth,
     catName: assessment.catName,
     createdAt: assessment.createdAt,
-    deletedAt: assessment.deletedAt,
     instrumentType: assessment.instrumentType,
     riskLevel: assessment.riskLevel,
     score: assessment.score,
@@ -20,4 +19,12 @@ exports.getList = async () => {
   // the assessment data from the PostgreSQL database
   const assessments = await Assessment.findAll();
   return assessments;
+};
+
+exports.deleteAssessment = async (idValue) => {
+  await Assessment.destroy({
+    where: {
+      id: idValue,
+    },
+  });
 };

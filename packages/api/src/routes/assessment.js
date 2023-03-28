@@ -47,4 +47,21 @@ assessmentRouter.get(
   },
 );
 
+assessmentRouter.post(
+  `/delete`,
+  async (req, res, next) => {
+    // console.log(`request---response`, req.body);
+    try {
+      await AssessmentService.deleteAssessment(req.body.id);
+      ResponseHandler(
+        res,
+        `Assessment deleted`,
+        {},
+      );
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 module.exports = { assessmentRouter };

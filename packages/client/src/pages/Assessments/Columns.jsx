@@ -31,8 +31,4 @@ export const COLUMNS = [
     Header: `Updated At`,
     accessor: `updatedAt`,
   },
-  {
-    Header: `Deleted At`,
-    accessor: `deletedAt`,
-  },
 ];

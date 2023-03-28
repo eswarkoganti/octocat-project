@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import '../../scss/NewAssessment.scss';
 import { AssessmentService } from '../../services/AssessmentService';
@@ -8,14 +8,13 @@ export const NewAssessment = () => {
     catDateOfBirth: ``,
     catName: ``,
     createdAt: new Date(),
-    deletedAt: new Date(),
     instrumentType: ``,
     riskLevel: ``,
     score: undefined,
     updatedAt: new Date(),
 
   };
-  const { handleSubmit, register, reset } = useForm();
+  const { formState: { errors }, handleSubmit, register, reset } = useForm();
 
   // create a form that utilizes the "onSubmit" function to send data to
   // packages/client/src/services/AssessmentService.js and then onto the packages/api/src/routes/assessment express API
@@ -39,7 +38,7 @@ export const NewAssessment = () => {
     initialData.score = sum;
     initialData.riskLevel = riskLevel;
     initialData.catName = data.catName;
-    initialData.catDateOfBirth = data.catDateOfBirth;
+    initialData.catDateOfBirth = new Date(data.catDateOfBirth).toString();
     AssessmentService.submit(initialData);
     reset();
   };
@@ -47,36 +46,41 @@ export const NewAssessment = () => {
   return (
     <div className="new-assessment">
       <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-1 flex-col justify-evenly">
+        onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <div className="col">
             <label htmlFor="Cat Name">Cat Name</label>
             <div>
               <input
-                {...register(`catName`)}
+                id="Cat Name"
                 type="text"
                 placeholder="Cat Name"
                 className="input"
+                {...register(`catName`, { required: `Please enter cat name` })}
               />
+              <p style={{ color: `red` }}>{errors.catName?.message}</p>
             </div>
           </div>
           <div className="col">
             <label htmlFor="Cat Date of Birth">Cat Date of Birth</label>
             <div>
               <input
+                id="Cat Date of Birth"
                 type="date"
                 placeholder="Cat Date of Birth"
-                {...register(`catDateOfBirth`)}
                 className="input"
+                {...register(`catDateOfBirth`, { required: `Please select cat date of birth` })}
               />
+              <p style={{ color: `red` }}>{errors.catDateOfBirth?.message}</p>
             </div>
           </div>
         </div>
 
         <div className="row mt-3">
           <div className="col-md-6">
-            <label htmlFor="Previous contact with the Cat">Previous contact with the Cat Judicial System</label>
+            <label htmlFor="Previous contact with the Cat Judicial System">
+              Previous contact with the Cat Judicial System
+            </label>
             <div>
               <input
                 type="radio"
@@ -100,16 +104,16 @@ export const NewAssessment = () => {
             <div>
               <input
                 type="radio"
-                {...register(`physicalAltercationWithOtherCats`)}
                 value="0"
+                {...register(`physicalAltercationWithOtherCats`)}
               />
               <label htmlFor="0-3altercations" className="radio-label">0-3 altercations</label>
             </div>
             <div>
               <input
                 type="radio"
-                {...register(`physicalAltercationWithOtherCats`)}
                 value="1"
+                {...register(`physicalAltercationWithOtherCats`)}
               />
               <label htmlFor="3+ altercations" className="radio-label">3+ altercations</label>
             </div>
@@ -119,20 +123,22 @@ export const NewAssessment = () => {
         {/* -------------------------- */}
         <div className="row mt-3">
           <div className="col-md-6">
-            <label htmlFor="Physical altercations">Physical altercations with owner (scratching, biting, etc...)</label>
+            <label htmlFor="Physical altercations with owner (scratching, biting, etc...)">
+              Physical altercations with owner (scratching, biting, etc...)
+            </label>
             <div>
               <input
                 type="radio"
-                {...register(`physicalAltercationsWithOwner`)}
                 value="1"
+                {...register(`physicalAltercationsWithOwner`)}
               />
               <label htmlFor="10+ altercations" className="radio-label">10+ altercations</label>
             </div>
             <div>
               <input
                 type="radio"
-                {...register(`physicalAltercationsWithOwner`)}
                 value="0"
+                {...register(`physicalAltercationsWithOwner`)}
               />
               <label htmlFor="0-10 altercations" className="radio-label">0-10 altercations</label>
             </div>
