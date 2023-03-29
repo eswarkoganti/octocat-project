@@ -30,7 +30,7 @@ export const AssessmentList = () => {
   }, []);
 
   const columns = useMemo(() => COLUMNS, []);
-  const data = assessments;
+  const data = useMemo(() => assessments);
 
   const handleDelete = (id) => {
     const text = `Are you sure you want to delete the assessment?`;

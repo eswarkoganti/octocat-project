@@ -1,6 +1,6 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import '../../scss/NewAssessment.scss';
+import { Controller, useForm } from 'react-hook-form';
+import { Button, Form } from 'react-bootstrap';
 import { AssessmentService } from '../../services/AssessmentService';
 
 export const NewAssessment = () => {
@@ -14,7 +14,7 @@ export const NewAssessment = () => {
     updatedAt: new Date(),
 
   };
-  const { formState: { errors }, handleSubmit, register, reset } = useForm();
+  const { control, formState: { errors }, handleSubmit, register, reset } = useForm();
 
   // create a form that utilizes the "onSubmit" function to send data to
   // packages/client/src/services/AssessmentService.js and then onto the packages/api/src/routes/assessment express API
@@ -38,160 +38,111 @@ export const NewAssessment = () => {
     initialData.score = sum;
     initialData.riskLevel = riskLevel;
     initialData.catName = data.catName;
-    initialData.catDateOfBirth = new Date(data.catDateOfBirth).toString();
+    initialData.catDateOfBirth = new Date(data.catDateOfBirth);
     AssessmentService.submit(initialData);
     reset();
   };
 
   return (
-    <div className="new-assessment">
-      <form
-        onSubmit={handleSubmit(onSubmit)}>
-        <div className="row">
-          <div className="col">
-            <label htmlFor="Cat Name">Cat Name</label>
-            <div>
-              <input
-                id="Cat Name"
-                type="text"
-                placeholder="Cat Name"
-                className="input"
-                {...register(`catName`, { required: `Please enter cat name` })}
-              />
-              <p style={{ color: `red` }}>{errors.catName?.message}</p>
-            </div>
-          </div>
-          <div className="col">
-            <label htmlFor="Cat Date of Birth">Cat Date of Birth</label>
-            <div>
-              <input
-                id="Cat Date of Birth"
-                type="date"
-                placeholder="Cat Date of Birth"
-                className="input"
-                {...register(`catDateOfBirth`, { required: `Please select cat date of birth` })}
-              />
-              <p style={{ color: `red` }}>{errors.catDateOfBirth?.message}</p>
-            </div>
-          </div>
-        </div>
+    <div className="assessment-form">
+      <Form onSubmit={handleSubmit(onSubmit)} >
+        <Form.Group className="mb-2">
+          <Form.Label>Cat Name</Form.Label>
+          <Controller control={control} name="catName" defaultValue=""
+            render={({ field: { onChange, ref, value } }) =>
+              <Form.Control onChange={onChange} value={value} ref={ref} placeholder="Enter Cat Name"
+                {...register(`catName`, { required: `Please Enter Cat Name` })} />} />
+          <Form.Control.Feedback type="required" style={{ color: `red` }}>
+            {errors.catName?.message}
+          </Form.Control.Feedback>
+        </Form.Group>
 
-        <div className="row mt-3">
-          <div className="col-md-6">
-            <label htmlFor="Previous contact with the Cat Judicial System">
-              Previous contact with the Cat Judicial System
-            </label>
-            <div>
-              <input
-                type="radio"
-                value="0"
-                {...register(`previousContactWithTheCatJudicial`)}
-              />
-              <label htmlFor="No" className="radio-label">No</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                value="1"
-                {...register(`previousContactWithTheCatJudicial`)}
-              />
-              <label htmlFor="Yes" className="radio-label">Yes</label>
-            </div>
-          </div>
-          {/* -------------------------------- */}
-          <div className="col-md-6">
-            <label htmlFor="Physical altercations with other cats">Physical altercations with other cats</label>
-            <div>
-              <input
-                type="radio"
-                value="0"
-                {...register(`physicalAltercationWithOtherCats`)}
-              />
-              <label htmlFor="0-3altercations" className="radio-label">0-3 altercations</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                value="1"
-                {...register(`physicalAltercationWithOtherCats`)}
-              />
-              <label htmlFor="3+ altercations" className="radio-label">3+ altercations</label>
-            </div>
-          </div>
-        </div>
+        <Form.Group className="mb-2">
+          <Form.Label>Cat Date of Birth</Form.Label>
+          <Controller control={control} name="catDateOfBirth" defaultValue=""
+            render={({ field: { onChange, ref, value } }) =>
+              <Form.Control onChange={onChange} value={value} ref={ref} type="date"
+                placeholder="Enter Cat Date of Birth"
+                {...register(`catDateOfBirth`, { required: `Please Select Cat Date of Birth` })}
+              />} />
+          <Form.Control.Feedback type="required" style={{ color: `red` }}>
+            {errors.catDateOfBirth?.message}
+          </Form.Control.Feedback>
+        </Form.Group>
 
-        {/* -------------------------- */}
-        <div className="row mt-3">
-          <div className="col-md-6">
-            <label htmlFor="Physical altercations with owner (scratching, biting, etc...)">
-              Physical altercations with owner (scratching, biting, etc...)
-            </label>
-            <div>
-              <input
-                type="radio"
-                value="1"
-                {...register(`physicalAltercationsWithOwner`)}
-              />
-              <label htmlFor="10+ altercations" className="radio-label">10+ altercations</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                value="0"
-                {...register(`physicalAltercationsWithOwner`)}
-              />
-              <label htmlFor="0-10 altercations" className="radio-label">0-10 altercations</label>
-            </div>
+        <div className="row mb-2">
+          <div className="col-6">
+            <Form.Group>
+              <Form.Label>Previous contact with the Cat Judicial System</Form.Label>
+              <Controller control={control} name="previousContactWithTheCatJudicial"
+                render={({ field: { onChange, ref } }) =>
+                  <>
+                    <Form.Check onChange={onChange} value="0" ref={ref} label="No" type="radio"
+                    />
+                    <Form.Check onChange={onChange} value="1" ref={ref} label="Yes" type="radio"
+                    />
+                  </>} />
+            </Form.Group>
           </div>
-          {/* ------------------ */}
-          <div className="col-md-6">
-            <label htmlFor="Plays well with dogs">Plays well with dogs</label>
-            <div>
-              <input
-                type="radio"
-                value="1"
-                {...register(`playsWellWithDogs`)}
-              />
-              <label htmlFor="No" className="radio-label">No</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                value="0"
-                {...register(`playsWellWithDogs`)}
-              />
-              <label htmlFor="Yes" className="radio-label">Yes</label>
-            </div>
+          <div className="col-6">
+            <Form.Group>
+              <Form.Label>Physical altercations with other cats</Form.Label>
+              <Controller control={control} name="physicalAltercationWithOtherCats"
+                render={({ field: { onChange, ref } }) =>
+                  <>
+                    <Form.Check onChange={onChange} value="0" ref={ref} label="0-3 altercations" type="radio"
+                    />
+                    <Form.Check onChange={onChange} value="1" ref={ref} label="3+ altercations" type="radio"
+                    />
+                  </>} />
+            </Form.Group>
           </div>
         </div>
-        <div className="mt-3">
-          <label htmlFor="Hisses at strangers">Hisses at strangers</label>
-          <div>
-            <input
-              type="radio"
-              value="1"
-              {...register(`hissesAtStrangers`)}
-            />
-            <label htmlFor="Yes" className="radio-label">Yes</label>
+        <div className="row mb-2">
+          <div className="col-6">
+            <Form.Group>
+              <Form.Label>Physical altercations with owner (scratching, biting, etc...)</Form.Label>
+              <Controller control={control} name="physicalAltercationsWithOwner"
+                render={({ field: { onChange, ref } }) =>
+                  <>
+                    <Form.Check onChange={onChange} value="1" ref={ref} label="10+ altercations" type="radio"
+                    />
+                    <Form.Check onChange={onChange} value="2" ref={ref} label="0-10 altercations" type="radio"
+                    />
+                  </>} />
+            </Form.Group>
           </div>
-          <div>
-            <input
-              type="radio"
-              value="0"
-              {...register(`hissesAtStrangers`)}
-            />
-            <label htmlFor="No" className="radio-label">No</label>
+          <div className="col-6">
+            <Form.Group>
+              <Form.Label>Plays well with dogs</Form.Label>
+              <Controller control={control} name="playsWellWithDogs"
+                render={({ field: { onChange, ref } }) =>
+                  <>
+                    <Form.Check onChange={onChange} value="1" ref={ref} label="No" type="radio"
+                    />
+                    <Form.Check onChange={onChange} value="0" ref={ref} label="Yes" type="radio"
+                    />
+                  </>} />
+            </Form.Group>
           </div>
         </div>
-        <div className="mt-3">
-          <button
-            type="submit"
-            className="btn btn-primary"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
+        <Form.Group className="mb-2">
+          <Form.Label>Hisses at strangers</Form.Label>
+          <Controller control={control} name="hissesAtStrangers"
+            render={({ field: { onChange, ref } }) =>
+              <>
+                <Form.Check onChange={onChange} value="1" ref={ref} label="Yes" type="radio"
+                />
+                <Form.Check onChange={onChange} value="0" ref={ref} label="No" type="radio"
+                />
+              </>} />
+        </Form.Group>
+
+        <Button type="submit"
+          className="btn btn-primary">
+          Save
+        </Button>
+      </Form>
     </div>
   );
 };
