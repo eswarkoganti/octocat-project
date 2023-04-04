@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../scss/NewAssessment.scss';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Form } from 'react-bootstrap';
 import { AssessmentService } from '../../services/AssessmentService';
@@ -63,7 +64,7 @@ export const NewAssessment = () => {
 
         <Form.Group className="mb-2">
           <Form.Label>Cat Date of Birth</Form.Label>
-          <Controller control={control} name="catDateOfBirth" defaultValue=""
+          <Controller control={control} name="catDateOfBirth" defaultValue="" className="date-input"
             render={({ field: { onChange, ref, value } }) =>
               <Form.Control onChange={onChange} value={value} ref={ref} type="date"
                 placeholder="Enter Cat Date of Birth"

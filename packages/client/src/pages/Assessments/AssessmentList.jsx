@@ -61,11 +61,11 @@ export const AssessmentList = () => {
             <thead>
               {headerGroups.map((headerGroup) =>
                 <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) =>
-                    <th>
+                  {headerGroup.headers.map((column, i) =>
+                    <th key={i}>
                       <div {...column.getHeaderProps(column.getSortByToggleProps())}>
                         {column.render(`Header`)}
-                        <span>{column.isSorted ? column.isSortedDesc ? `🔼` : `🔽` : ``}</span>
+                        <span>{column.isSorted ? column.isSortedDesc ? `🔽` : `🔼` : ``}</span>
                       </div>
                       {column.canFilter ? column.render(`Filter`) : null }
                     </th>)}
