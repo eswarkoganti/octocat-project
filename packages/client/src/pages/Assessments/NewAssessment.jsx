@@ -5,7 +5,7 @@ import { AssessmentService } from '../../services/AssessmentService';
 
 export const NewAssessment = () => {
   const initialData = {
-    catDateOfBirth: ``,
+    catDateOfBirth: Date,
     catName: ``,
     createdAt: new Date(),
     instrumentType: ``,
@@ -20,12 +20,16 @@ export const NewAssessment = () => {
   // packages/client/src/services/AssessmentService.js and then onto the packages/api/src/routes/assessment express API
 
   const onSubmit = (data) => {
-    const a = data.hissesAtStrangers === null ? 0 : parseInt(data.hissesAtStrangers);
-    const b = data.physicalAltercationWithOtherCats === null ? 0 : parseInt(data.physicalAltercationWithOtherCats);
-    const c = data.physicalAltercationsWithOwner === null ? 0 : parseInt(data.physicalAltercationsWithOwner);
-    const d = data.playsWellWithDogs === null ? 0 : parseInt(data.playsWellWithDogs);
-    const e = data.previousContactWithTheCatJudicial === null ? 0 : parseInt(data.previousContactWithTheCatJudicial);
+    const a = data.hissesAtStrangers === undefined ? 0 : parseInt(data.hissesAtStrangers);
+    const b = data.physicalAltercationWithOtherCats === undefined ?
+      0 : parseInt(data.physicalAltercationWithOtherCats);
+    const c = data.physicalAltercationsWithOwner === undefined ?
+      0 : parseInt(data.physicalAltercationsWithOwner);
+    const d = data.playsWellWithDogs === undefined ? 0 : parseInt(data.playsWellWithDogs);
+    const e = data.previousContactWithTheCatJudicial === undefined ?
+      0 : parseInt(data.previousContactWithTheCatJudicial);
     const sum = a + b + c + d + e;
+
     let riskLevel = ``;
     if (sum < 2) {
       riskLevel = `low`;

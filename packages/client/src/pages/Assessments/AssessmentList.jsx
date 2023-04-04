@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import moment from 'moment';
 import '../../scss/AssessmentList.scss';
-import { useTable } from 'react-table';
+import { useFilters, useSortBy, useTable } from 'react-table';
 import { AssessmentService } from '../../services/AssessmentService';
 import { COLUMNS } from './Columns';
 
@@ -30,20 +30,25 @@ export const AssessmentList = () => {
   }, []);
 
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => assessments);
+  const data = assessments;
 
   const handleDelete = (id) => {
     const text = `Are you sure you want to delete the assessment?`;
     if (window.confirm(text) === true) {
-      AssessmentService.deleteAssessment(id);
-      fetchAssessments();
+      AssessmentService.deleteAssessment(id).then(response => {
+        if (response.status === 200) {
+          const newLists = assessments.filter(x => x.id !== id);
+          setAssessments(newLists);
+          // fetchAssessments();
+        }
+      });
     }
   };
 
   const assessmentTable = useTable({
     columns,
     data,
-  });
+  }, useFilters, useSortBy);
 
   const { getTableBodyProps, getTableProps, headerGroups, prepareRow, rows } = assessmentTable;
 
@@ -57,7 +62,13 @@ export const AssessmentList = () => {
               {headerGroups.map((headerGroup) =>
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) =>
-                    <th {...column.getHeaderProps()}>{column.render(`Header`)}</th>)}
+                    <th>
+                      <div {...column.getHeaderProps(column.getSortByToggleProps())}>
+                        {column.render(`Header`)}
+                        <span>{column.isSorted ? column.isSortedDesc ? `🔼` : `🔽` : ``}</span>
+                      </div>
+                      {column.canFilter ? column.render(`Filter`) : null }
+                    </th>)}
                   <th>Actions</th>
                 </tr>)}
             </thead>
@@ -82,5 +93,4 @@ export const AssessmentList = () => {
       }
     </>
   );
-
 };
