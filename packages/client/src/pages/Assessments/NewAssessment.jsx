@@ -29,18 +29,18 @@ export const NewAssessment = () => {
     const d = data.playsWellWithDogs === undefined ? 0 : parseInt(data.playsWellWithDogs);
     const e = data.previousContactWithTheCatJudicial === undefined ?
       0 : parseInt(data.previousContactWithTheCatJudicial);
-    const sum = a + b + c + d + e;
+    const scoreSum = a + b + c + d + e;
 
     let riskLevel = ``;
-    if (sum < 2) {
+    if (scoreSum < 2) {
       riskLevel = `low`;
-    } else if (sum >= 2 && sum <= 4) {
+    } else if (scoreSum >= 2 && scoreSum <= 4) {
       riskLevel = `medium`;
     } else {
       riskLevel = `high`;
     }
     initialData.instrumentType = `instrument`;
-    initialData.score = sum;
+    initialData.score = scoreSum;
     initialData.riskLevel = riskLevel;
     initialData.catName = data.catName;
     initialData.catDateOfBirth = new Date(data.catDateOfBirth);
